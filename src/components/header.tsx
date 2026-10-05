@@ -26,6 +26,12 @@ export default function Header() {
 
                 <div className="flex items-center gap-3">
                     <Show when="signed-in">
+                        <Link
+                            href="/dashboard"
+                            className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                        >
+                            Dashboard
+                        </Link>
                         <UserButton
                             appearance={{
                                 elements: { avatarBox: "h-9 w-9" },

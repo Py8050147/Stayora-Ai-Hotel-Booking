@@ -324,8 +324,8 @@ async function main() {
         state: h.state,
         country: "India",
         postalCode: String(100000 + created * 1111),
-        latitude: h.lat,
-        longitude: h.lng,
+        latitude: h.lat as any,
+        longitude: h.lng as any,
       });
 
       await tx.orm.public.HotelImage.createAll(
@@ -354,7 +354,7 @@ async function main() {
           maxChildren: rt.children,
           bedType: rt.bed,
           totalRooms: rt.rooms,
-          basePrice,
+          basePrice: basePrice as any,
         });
 
         await tx.orm.public.RoomInventory.createAll(
@@ -367,7 +367,7 @@ async function main() {
               roomTypeId: roomType.id,
               date,
               availableRooms: rt.rooms,
-              price,
+              price: price as any,
               isClosed: false,
             };
           }),

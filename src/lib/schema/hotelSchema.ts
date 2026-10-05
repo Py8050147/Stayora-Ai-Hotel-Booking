@@ -18,8 +18,20 @@ export const createSchema = z.object({
     state: z.string().min(1),
     country: z.string().min(1),
     postalCode: z.string().min(3),
-    latitude: z.number().min(-90).max(90).optional(),
-    longitude: z.number().min(-180).max(180).optional(),
+    latitude: z.union([
+      z.number().min(-90).max(90),
+      z.string().transform((val) => {
+        const num = parseFloat(val);
+        return isNaN(num) ? undefined : num;
+      }),
+    ]).optional(),
+    longitude: z.union([
+      z.number().min(-180).max(180),
+      z.string().transform((val) => {
+        const num = parseFloat(val);
+        return isNaN(num) ? undefined : num;
+      }),
+    ]).optional(),
   }),
   images: z.array(z.string().url()).max(30).default([]),
   amenityIds: z.array(z.string().uuid()).default([]),

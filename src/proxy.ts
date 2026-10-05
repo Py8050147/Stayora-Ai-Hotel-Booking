@@ -1,14 +1,12 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-// Pages that require sign-in (change to your real routes)
-const isProtectedRoute = createRouteMatcher([
+const isProtectedRoute = createRouteMatcher ([
   "/dashboard(.*)",
-  "/admin(.*)",
-  "/bookings(.*)",
+  "/profile(.*)",
+  // DON'T put /api/hotel here
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
-  console.log("PROXY RUNNING:", req.nextUrl.pathname);
   if (isProtectedRoute(req)) {
     await auth.protect();
   }
@@ -16,8 +14,7 @@ export default clerkMiddleware(async (auth, req) => {
 
 export const config = {
   matcher: [
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-    "/__clerk/:path*",
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|png|jpg|jpeg|gif|svg|ico|webp|woff2?|ttf|map|txt|xml|pdf)).*)",
     "/(api|trpc)(.*)",
   ],
 };
