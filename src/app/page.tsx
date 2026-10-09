@@ -186,6 +186,8 @@ const demoHotels: Hotel[] = [
   },
 ];
 
+import Header from "@/components/header";
+
 export default function HomePage() {
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [loading, setLoading] = useState(true);
@@ -280,45 +282,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-40 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#0f766e] text-white">
-                <Sparkles size={20} strokeWidth={2.5} />
-              </div>
-              <span className="text-xl font-bold tracking-tight text-[#0f766e]">stayora</span>
-            </Link>
-
-            <div className="hidden md:flex items-center gap-8">
-              <Link href="#" className="text-sm font-medium text-gray-600 hover:text-[#0f766e] transition-colors">
-                Find a stay
-              </Link>
-              <Link href="#" className="text-sm font-medium text-gray-600 hover:text-[#0f766e] transition-colors">
-                Inspiration
-              </Link>
-              <Link href="/dashboard" className="text-sm font-medium text-gray-600 hover:text-[#0f766e] transition-colors">
-                My Hotels
-              </Link>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <Link href="/dashboard">
-                <button className="hidden sm:flex items-center gap-2 rounded-lg bg-[#0f766e] px-4 py-2 text-sm font-semibold text-white hover:bg-[#0d5c5a] transition-colors">
-                  Host Your Hotel
-                </button>
-              </Link>
-              <button className="rounded-full p-2 hover:bg-gray-100">
-                <Users size={20} className="text-gray-600" />
-              </button>
-              <button className="md:hidden rounded-full p-2 hover:bg-gray-100">
-                <Menu size={20} className="text-gray-600" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Header />
 
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-[#0f766e] pt-16 pb-32 lg:pt-32 lg:pb-48">

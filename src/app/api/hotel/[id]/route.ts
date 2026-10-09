@@ -34,6 +34,21 @@ export async function PATCH(
       return NextResponse.json({ error: "Forbidden: You do not own this hotel" }, { status: 403 });
     }
 
+    // Update address separately if it exists, otherwise create it
+    if (hotel.address) {
+      await db.orm.public.Address
+        .where({ id: hotel.address.id })
+        .update({
+          addressLine: parsedData.address.addressLine,
+          city: parsedData.address.city,
+          state: parsedData.address.state,
+          country: parsedData.address.country,
+          postalCode: parsedData.address.postalCode,
+          latitude: parsedData.address.latitude !== undefined ? String(parsedData.address.latitude) : undefined,
+          longitude: parsedData.address.longitude !== undefined ? String(parsedData.address.longitude) : undefined,
+        });
+    }
+
     const updatedHotel = await db.orm.public.Hotel
       .where({ id })
       .update({
@@ -41,7 +56,6 @@ export async function PATCH(
         description: parsedData.description,
         starRating: parsedData.starRating,
         images: (rel) => {
-          // First disconnect all existing images, then create new ones
           rel.disconnect();
           return rel.create(parsedData.images.map((url, index) => ({
             imageUrl: url,
@@ -49,26 +63,15 @@ export async function PATCH(
             isPrimary: index === 0,
           })));
         },
-        address: (rel) => rel.upsert({
-          create: {
-            addressLine: parsedData.address.addressLine,
-            city: parsedData.address.city,
-            state: parsedData.address.state,
-            country: parsedData.address.country,
-            postalCode: parsedData.address.postalCode,
-            latitude: parsedData.address.latitude !== undefined ? String(parsedData.address.latitude) : undefined,
-            longitude: parsedData.address.longitude !== undefined ? String(parsedData.address.longitude) : undefined,
-          },
-          update: {
-            addressLine: parsedData.address.addressLine,
-            city: parsedData.address.city,
-            state: parsedData.address.state,
-            country: parsedData.address.country,
-            postalCode: parsedData.address.postalCode,
-            latitude: parsedData.address.latitude !== undefined ? String(parsedData.address.latitude) : undefined,
-            longitude: parsedData.address.longitude !== undefined ? String(parsedData.address.longitude) : undefined,
-          },
-        }),
+        address: !hotel.address ? (rel) => rel.create({
+          addressLine: parsedData.address.addressLine,
+          city: parsedData.address.city,
+          state: parsedData.address.state,
+          country: parsedData.address.country,
+          postalCode: parsedData.address.postalCode,
+          latitude: parsedData.address.latitude !== undefined ? String(parsedData.address.latitude) : undefined,
+          longitude: parsedData.address.longitude !== undefined ? String(parsedData.address.longitude) : undefined,
+        }) : undefined,
         amenities: (rel) => {
           rel.disconnect();
           return rel.create(parsedData.amenityIds.map((amenityId) => ({ amenityId })));

@@ -26,7 +26,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  await checkUser();
+  // await checkUser();
 
   return (
     <ClerkProvider telemetry={false}>

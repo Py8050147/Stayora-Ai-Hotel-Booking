@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
+import ImageUploader from "@/components/ui/ImageUploader";
 
 const MapPicker = dynamic(() => import("./MapPicker"), { ssr: false });
 
@@ -59,15 +60,13 @@ export default function CreateHotelForm() {
 
   const latitude = watch("address.latitude");
   const longitude = watch("address.longitude");
-
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "images",
-  });
+  const currentImages = watch("images") || [];
 
   async function onSubmit(values: FormValues) {
     setIsLoading(true);
     try {
+      console.log("Submitting form with values:", values);
+
       const response = await fetch("/api/hotel", {
         method: "POST",
         headers: {
@@ -76,15 +75,18 @@ export default function CreateHotelForm() {
         body: JSON.stringify(values),
       });
 
+      const data = await response.json();
+      console.log("API response:", data);
+
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to create hotel");
+        throw new Error(data.error || "Failed to create hotel");
       }
 
       toast.success("Your hotel has been created successfully.");
       router.push("/dashboard");
     } catch (error: any) {
-      toast.error(error.message);
+      console.error("Form submission error:", error);
+      toast.error(error.message || "Something went wrong");
     } finally {
       setIsLoading(false);
     }
@@ -114,7 +116,6 @@ export default function CreateHotelForm() {
               <Label htmlFor="starRating">Star Rating</Label>
               <Select
                 onValueChange={(value) => setValue("starRating", parseInt(value))}
-                defaultValue={undefined}
               >
                 <SelectTrigger id="starRating">
                   <SelectValue placeholder="Select rating" />
@@ -210,35 +211,13 @@ export default function CreateHotelForm() {
           {/* Images Section */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Hotel Images</h3>
-            <div className="space-y-3">
-              {fields.map((field, index) => (
-                <div key={field.id} className="flex gap-2">
-                  <div className="flex-1 space-y-2">
-                    <Input
-                      placeholder="https://example.com/image.jpg"
-                      {...register(`images.${index}` as const)}
-                    />
-                    {errors.images?.[index] && (
-                      <p className="text-sm text-destructive">Please provide a valid URL (e.g., https://...)</p>
-                    )}
-                  </div>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => remove(index)}
-                  >
-                    Remove
-                  </Button>
-                </div>
-              ))}
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => append("")}
-              >
-                Add Image URL
-              </Button>
-            </div>
+            <ImageUploader
+              images={currentImages}
+              onImagesChange={(newImages) => setValue("images", newImages, { shouldValidate: true })}
+            />
+            {errors.images && (
+              <p className="text-sm text-destructive">{errors.images.message}</p>
+            )}
           </div>
 
           {/* Amenities Section */}

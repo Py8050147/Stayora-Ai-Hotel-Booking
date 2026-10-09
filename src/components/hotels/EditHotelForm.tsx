@@ -18,6 +18,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import ImageUploader from "@/components/ui/ImageUploader";
 
 type FormValues = z.infer<typeof createSchema>;
 
@@ -35,6 +36,7 @@ export default function EditHotelForm({ hotel, onSuccess, onCancel }: EditHotelF
     handleSubmit,
     control,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(createSchema),
@@ -58,10 +60,7 @@ export default function EditHotelForm({ hotel, onSuccess, onCancel }: EditHotelF
     },
   });
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "images",
-  });
+  const currentImages = watch("images") || [];
 
   async function onSubmit(values: FormValues) {
     setIsLoading(true);
@@ -89,8 +88,8 @@ export default function EditHotelForm({ hotel, onSuccess, onCancel }: EditHotelF
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 min-w-[300px] min-h-fit flex flex-col">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <form onSubmit={handleSubmit(onSubmit)} className=" min-w-300px  flex flex-col gap-6 bg-background ">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 ">
         <div className="space-y-2">
           <Label htmlFor="name">Hotel Name</Label>
           <Input id="name" {...register("name")} />
@@ -169,18 +168,13 @@ export default function EditHotelForm({ hotel, onSuccess, onCancel }: EditHotelF
 
       <div className="space-y-4">
         <h3 className="text-lg font-semibold">Hotel Images</h3>
-        <div className="space-y-3">
-          {fields.map((field, index) => (
-            <div key={field.id} className="flex gap-2">
-              <div className="flex-1 space-y-2">
-                <Input {...register(`images.${index}` as const)} />
-                {errors.images?.[index] && <p className="text-sm text-destructive">Invalid URL</p>}
-              </div>
-              <Button type="button" variant="outline" onClick={() => remove(index)}>Remove</Button>
-            </div>
-          ))}
-          <Button type="button" variant="secondary" onClick={() => append("")}>Add Image URL</Button>
-        </div>
+        <ImageUploader
+          images={currentImages}
+          onImagesChange={(newImages) => setValue("images", newImages, { shouldValidate: true })}
+        />
+        {errors.images && (
+          <p className="text-sm text-destructive">{errors.images.message}</p>
+        )}
       </div>
 
       <div className="space-y-4">

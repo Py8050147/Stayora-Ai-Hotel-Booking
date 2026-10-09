@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useAuth } from "@clerk/nextjs";
+import { redirect, useRouter } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -34,11 +36,20 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Edit2, Trash2, RefreshCw, Loader2 } from "lucide-react";
+import { Edit2, Trash2, RefreshCw, Loader2, Plus } from "lucide-react";
 import EditHotelForm from "@/components/hotels/EditHotelForm";
 import { toast } from "sonner";
 
 export default function DashboardPage() {
+  const { isSignedIn, isLoaded } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      redirect("/sign-in");
+    }
+  }, [isLoaded, isSignedIn]);
+
   const [hotels, setHotels] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [editingHotel, setEditingHotel] = useState<any>(null);
@@ -84,15 +95,24 @@ export default function DashboardPage() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-2xl font-bold">My Hotels</CardTitle>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => fetchHotels()}
-            disabled={isLoading}
-          >
-            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
-            <span className="ml-2">Refresh</span>
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => fetchHotels()}
+              disabled={isLoading}
+            >
+              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+              <span className="ml-2">Refresh</span>
+            </Button>
+            <Button
+              size="sm"
+              onClick={() => router.push("/hotels/create")}
+            >
+              <Plus className="h-4 w-4" />
+              <span className="ml-2">Add Hotel</span>
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           {isLoading ? (
@@ -164,16 +184,20 @@ export default function DashboardPage() {
               <p className="text-muted-foreground text-lg">
                 You haven't added any hotels yet.
               </p>
-              <a href="/hotels/create" className="mt-4 inline-block text-primary hover:underline font-medium">
+              <Button
+                className="mt-4"
+                onClick={() => router.push("/hotels/create")}
+              >
+                <Plus className="h-4 w-4 mr-2" />
                 Add your first hotel
-              </a>
+              </Button>
             </div>
           )}
         </CardContent>
       </Card>
 
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="max-w-4xl">
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Edit Hotel</DialogTitle>
           </DialogHeader>

@@ -33,7 +33,7 @@ export const createSchema = z.object({
       }),
     ]).optional(),
   }),
-  images: z.array(z.string().url()).max(30).default([]),
+  images: z.array(z.string().min(1)).max(30).default([]),
   amenityIds: z.array(z.string().uuid()).default([]),
 });
 
