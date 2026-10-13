@@ -48,6 +48,10 @@ export default function CreateHotelForm() {
         addressLine: "",
         city: "",
         state: "",
+
+
+
+
         country: "",
         postalCode: "",
         latitude: undefined,

@@ -7,7 +7,7 @@ import { createSchema } from "@/lib/schema/hotelSchema";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const User = await currentUser();
@@ -31,52 +31,73 @@ export async function PATCH(
     }
 
     if (hotel.ownerId !== dbUser.id) {
-      return NextResponse.json({ error: "Forbidden: You do not own this hotel" }, { status: 403 });
+      return NextResponse.json(
+        { error: "Forbidden: You do not own this hotel" },
+        { status: 403 },
+      );
     }
+
+    const addressData = parsedData.address;
 
     // Update address separately if it exists, otherwise create it
-    if (hotel.address) {
-      await db.orm.public.Address
-        .where({ id: hotel.address.id })
-        .update({
-          addressLine: parsedData.address.addressLine,
-          city: parsedData.address.city,
-          state: parsedData.address.state,
-          country: parsedData.address.country,
-          postalCode: parsedData.address.postalCode,
-          latitude: parsedData.address.latitude !== undefined ? String(parsedData.address.latitude) : undefined,
-          longitude: parsedData.address.longitude !== undefined ? String(parsedData.address.longitude) : undefined,
-        });
+    if (hotel.address && addressData) {
+      await db.orm.public.Address.where({ id: hotel.address.id }).update({
+        addressLine: addressData.addressLine,
+        city: addressData.city,
+        state: addressData.state,
+        country: addressData.country,
+        postalCode: addressData.postalCode,
+        latitude:
+          addressData.latitude !== undefined
+            ? String(addressData.latitude)
+            : undefined,
+        longitude:
+          addressData.longitude !== undefined
+            ? String(addressData.longitude)
+            : undefined,
+      });
     }
 
-    const updatedHotel = await db.orm.public.Hotel
-      .where({ id })
-      .update({
-        name: parsedData.name,
-        description: parsedData.description,
-        starRating: parsedData.starRating,
-        images: (rel) => {
-          rel.disconnect();
-          return rel.create(parsedData.images.map((url, index) => ({
+    const updatedHotel = await db.orm.public.Hotel.where({ id }).update({
+      name: parsedData.name,
+      description: parsedData.description,
+      starRating: parsedData.starRating,
+      images: (rel) => {
+        rel.disconnect();
+        return rel.create(
+          parsedData.images.map((url, index) => ({
             imageUrl: url,
             sortOrder: index,
             isPrimary: index === 0,
-          })));
-        },
-        address: !hotel.address ? (rel) => rel.create({
-          addressLine: parsedData.address.addressLine,
-          city: parsedData.address.city,
-          state: parsedData.address.state,
-          country: parsedData.address.country,
-          postalCode: parsedData.address.postalCode,
-          latitude: parsedData.address.latitude !== undefined ? String(parsedData.address.latitude) : undefined,
-          longitude: parsedData.address.longitude !== undefined ? String(parsedData.address.longitude) : undefined,
-        }) : undefined,
-        amenities: (rel) => {
-          rel.disconnect();
-          return rel.create(parsedData.amenityIds.map((amenityId) => ({ amenityId })));
-        },
-      });
+          })),
+        );
+      },
+      address:
+        !hotel.address && addressData
+          ? (rel) =>
+              rel.create({
+                addressLine: addressData.addressLine,
+                city: addressData.city,
+                state: addressData.state,
+                country: addressData.country,
+                postalCode: addressData.postalCode,
+                latitude:
+                  addressData.latitude !== undefined
+                    ? String(addressData.latitude)
+                    : undefined,
+                longitude:
+                  addressData.longitude !== undefined
+                    ? String(addressData.longitude)
+                    : undefined,
+              })
+          : undefined,
+      amenities: (rel) => {
+        rel.disconnect();
+        return rel.create(
+          parsedData.amenityIds.map((amenityId) => ({ amenityId })),
+        );
+      },
+    });
 
     return NextResponse.json(updatedHotel, { status: 200 });
   } catch (error) {
@@ -87,13 +108,16 @@ export async function PATCH(
       );
     }
     console.error("Error updating hotel:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }
 
 export async function DELETE(
   req: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const User = await currentUser();
@@ -115,16 +139,23 @@ export async function DELETE(
     }
 
     if (hotel.ownerId !== dbUser.id) {
-      return NextResponse.json({ error: "Forbidden: You do not own this hotel" }, { status: 403 });
+      return NextResponse.json(
+        { error: "Forbidden: You do not own this hotel" },
+        { status: 403 },
+      );
     }
 
-    await db.orm.public.Hotel
-      .where({ id })
-      .delete();
+    await db.orm.public.Hotel.where({ id }).delete();
 
-    return NextResponse.json({ message: "Hotel deleted successfully" }, { status: 200 });
+    return NextResponse.json(
+      { message: "Hotel deleted successfully" },
+      { status: 200 },
+    );
   } catch (error) {
     console.error("Error deleting hotel:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }

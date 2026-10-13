@@ -122,8 +122,8 @@ model Hotel {
   description  String?
   starRating   Int?                       @map("star_rating")
   status       HotelStatus                @default(DRAFT)
-  checkInTime  String                     @default("14:00") @map("check_in_time")
-  checkOutTime String                     @default("11:00") @map("check_out_time")
+  // checkInTime  String                     @default("14:00") @map("check_in_time")
+  // checkOutTime String                     @default("11:00") @map("check_out_time")
   createdAt    TimestamptzJsDate          @default(now()) @map("created_at")
   updatedAt    temporal.updatedAtJsDate() @map("updated_at")
 

@@ -29,14 +29,13 @@ export default async function RootLayout({
   // await checkUser();
 
   return (
-    <ClerkProvider telemetry={false}>
       <html
         lang="en"
         className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
         suppressHydrationWarning
       >
-        <body className="min-h-full flex flex-col"
-        >
+    <ClerkProvider telemetry={false}>
+        <body className="min-h-full flex flex-col">
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -46,7 +45,7 @@ export default async function RootLayout({
             {children}
           </ThemeProvider>
         </body>
-      </html>
     </ClerkProvider>
+      </html>
   );
 }
