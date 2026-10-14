@@ -115,26 +115,24 @@ model User {
 // HOTELS & PROPERTY DATA
 // ============================================================
 model Hotel {
-  id           Uuid                       @id @default(uuid())
-  ownerId      Uuid                       @map("owner_id")
-  name         String
-  slug         String                     @unique
-  description  String?
-  starRating   Int?                       @map("star_rating")
-  status       HotelStatus                @default(DRAFT)
-  // checkInTime  String                     @default("14:00") @map("check_in_time")
-  // checkOutTime String                     @default("11:00") @map("check_out_time")
-  createdAt    TimestamptzJsDate          @default(now()) @map("created_at")
-  updatedAt    temporal.updatedAtJsDate() @map("updated_at")
+  id          Uuid                       @id @default(uuid())
+  ownerId     Uuid                       @map("owner_id")
+  name        String
+  slug        String                     @unique
+  description String?
+  starRating  Int?                       @map("star_rating")
+  status      HotelStatus                @default(DRAFT)
+  createdAt   TimestamptzJsDate          @default(now()) @map("created_at")
+  updatedAt   temporal.updatedAtJsDate() @map("updated_at")
 
-  owner        User                       @relation(fields: [ownerId], references: [id])
-  address      Address?
-  images       HotelImage[]
-  amenities    HotelAmenity[]
-  roomTypes    RoomType[]
-  bookings     Booking[]
-  reviews      Review[]
-  favorites    Favorite[]
+  owner       User                       @relation(fields: [ownerId], references: [id])
+  address     Address?
+  images      HotelImage[]
+  amenities   HotelAmenity[]
+  roomTypes   RoomType[]
+  bookings    Booking[]
+  reviews     Review[]
+  favorites   Favorite[]
 
   @@index([ownerId])
   @@index([status])

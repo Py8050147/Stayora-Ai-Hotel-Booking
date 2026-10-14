@@ -1185,20 +1185,6 @@
           },
           "Hotel": {
             "fields": {
-              "checkInTime": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/text@1",
-                  "kind": "scalar"
-                }
-              },
-              "checkOutTime": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/text@1",
-                  "kind": "scalar"
-                }
-              },
               "createdAt": {
                 "nullable": false,
                 "type": {
@@ -1395,12 +1381,6 @@
             },
             "storage": {
               "fields": {
-                "checkInTime": {
-                  "column": "check_in_time"
-                },
-                "checkOutTime": {
-                  "column": "check_out_time"
-                },
                 "createdAt": {
                   "column": "created_at"
                 },
@@ -2603,32 +2583,32 @@
               "columns": {
                 "address_line": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": false
                 },
                 "city": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": false
                 },
                 "country": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": false
                 },
                 "hotel_id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "latitude": {
                   "codecId": "pg/numeric@1",
-                  "nativeType": "numeric",
+                  "dataType": "pg/numeric",
                   "nullable": true,
                   "typeParams": {
                     "precision": 9,
@@ -2637,7 +2617,7 @@
                 },
                 "longitude": {
                   "codecId": "pg/numeric@1",
-                  "nativeType": "numeric",
+                  "dataType": "pg/numeric",
                   "nullable": true,
                   "typeParams": {
                     "precision": 9,
@@ -2646,17 +2626,22 @@
                 },
                 "postal_code": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": false
                 },
                 "state": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": false
                 }
               },
               "foreignKeys": [
                 {
+                  "index": {
+                    "unique": [
+                      "hotel_id"
+                    ]
+                  },
                   "onDelete": "cascade",
                   "source": {
                     "columns": [
@@ -2717,17 +2702,17 @@
               "columns": {
                 "category": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": true
                 },
                 "id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "name": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": false
                 }
               },
@@ -2750,22 +2735,22 @@
               "columns": {
                 "booking_id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "nights": {
                   "codecId": "pg/int4@1",
-                  "nativeType": "int4",
+                  "dataType": "pg/int4",
                   "nullable": false
                 },
                 "price_per_night": {
                   "codecId": "pg/numeric@1",
-                  "nativeType": "numeric",
+                  "dataType": "pg/numeric",
                   "nullable": false,
                   "typeParams": {
                     "precision": 10,
@@ -2774,17 +2759,17 @@
                 },
                 "quantity": {
                   "codecId": "pg/int4@1",
-                  "nativeType": "int4",
+                  "dataType": "pg/int4",
                   "nullable": false
                 },
                 "room_type_id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "subtotal": {
                   "codecId": "pg/numeric@1",
-                  "nativeType": "numeric",
+                  "dataType": "pg/numeric",
                   "nullable": false,
                   "typeParams": {
                     "precision": 10,
@@ -2794,6 +2779,9 @@
               },
               "foreignKeys": [
                 {
+                  "index": {
+                    "name": "booking_rooms_booking_id_idx_aeea169b"
+                  },
                   "onDelete": "cascade",
                   "source": {
                     "columns": [
@@ -2811,6 +2799,9 @@
                   }
                 },
                 {
+                  "index": {
+                    "name": "booking_rooms_room_type_id_idx_3209d37a"
+                  },
                   "source": {
                     "columns": [
                       "room_type_id"
@@ -2868,68 +2859,68 @@
               "columns": {
                 "adults": {
                   "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
                   "default": {
                     "kind": "literal",
                     "value": 1
                   },
-                  "nativeType": "int4",
                   "nullable": false
                 },
                 "booking_number": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": false
                 },
                 "cancel_reason": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": true
                 },
                 "cancelled_at": {
                   "codecId": "pg/timestamptz-date@1",
-                  "nativeType": "timestamptz",
+                  "dataType": "pg/timestamptz",
                   "nullable": true
                 },
                 "check_in": {
                   "codecId": "pg/date-string@1",
-                  "nativeType": "date",
+                  "dataType": "pg/date",
                   "nullable": false
                 },
                 "check_out": {
                   "codecId": "pg/date-string@1",
-                  "nativeType": "date",
+                  "dataType": "pg/date",
                   "nullable": false
                 },
                 "children": {
                   "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
                   "default": {
                     "kind": "literal",
                     "value": 0
                   },
-                  "nativeType": "int4",
                   "nullable": false
                 },
                 "coupon_id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": true
                 },
                 "created_at": {
                   "codecId": "pg/timestamptz-date@1",
+                  "dataType": "pg/timestamptz",
                   "default": {
                     "expression": "now()",
                     "kind": "function"
                   },
-                  "nativeType": "timestamptz",
                   "nullable": false
                 },
                 "discount": {
                   "codecId": "pg/numeric@1",
+                  "dataType": "pg/numeric",
                   "default": {
                     "kind": "literal",
                     "value": "0"
                   },
-                  "nativeType": "numeric",
                   "nullable": false,
                   "typeParams": {
                     "precision": 10,
@@ -2938,26 +2929,26 @@
                 },
                 "hold_expires_at": {
                   "codecId": "pg/timestamptz-date@1",
-                  "nativeType": "timestamptz",
+                  "dataType": "pg/timestamptz",
                   "nullable": true
                 },
                 "hotel_id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "payment_status": {
                   "codecId": "pg/text@1",
+                  "dataType": "pg/text",
                   "default": {
                     "kind": "literal",
                     "value": "PENDING"
                   },
-                  "nativeType": "text",
                   "nullable": false,
                   "valueSet": {
                     "entityKind": "valueSet",
@@ -2968,20 +2959,20 @@
                 },
                 "rooms": {
                   "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
                   "default": {
                     "kind": "literal",
                     "value": 1
                   },
-                  "nativeType": "int4",
                   "nullable": false
                 },
                 "status": {
                   "codecId": "pg/text@1",
+                  "dataType": "pg/text",
                   "default": {
                     "kind": "literal",
                     "value": "PENDING"
                   },
-                  "nativeType": "text",
                   "nullable": false,
                   "valueSet": {
                     "entityKind": "valueSet",
@@ -2992,7 +2983,7 @@
                 },
                 "subtotal": {
                   "codecId": "pg/numeric@1",
-                  "nativeType": "numeric",
+                  "dataType": "pg/numeric",
                   "nullable": false,
                   "typeParams": {
                     "precision": 10,
@@ -3001,11 +2992,11 @@
                 },
                 "tax": {
                   "codecId": "pg/numeric@1",
+                  "dataType": "pg/numeric",
                   "default": {
                     "kind": "literal",
                     "value": "0"
                   },
-                  "nativeType": "numeric",
                   "nullable": false,
                   "typeParams": {
                     "precision": 10,
@@ -3014,7 +3005,7 @@
                 },
                 "total_amount": {
                   "codecId": "pg/numeric@1",
-                  "nativeType": "numeric",
+                  "dataType": "pg/numeric",
                   "nullable": false,
                   "typeParams": {
                     "precision": 10,
@@ -3023,17 +3014,20 @@
                 },
                 "updated_at": {
                   "codecId": "pg/timestamptz-date@1",
-                  "nativeType": "timestamptz",
+                  "dataType": "pg/timestamptz",
                   "nullable": false
                 },
                 "user_id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 }
               },
               "foreignKeys": [
                 {
+                  "index": {
+                    "name": "bookings_user_id_idx_6c952402"
+                  },
                   "source": {
                     "columns": [
                       "user_id"
@@ -3050,6 +3044,9 @@
                   }
                 },
                 {
+                  "index": {
+                    "name": "bookings_hotel_id_idx_3d513303"
+                  },
                   "source": {
                     "columns": [
                       "hotel_id"
@@ -3066,6 +3063,9 @@
                   }
                 },
                 {
+                  "index": {
+                    "name": "bookings_coupon_id_idx_93db6295"
+                  },
                   "source": {
                     "columns": [
                       "coupon_id"
@@ -3164,12 +3164,12 @@
               "columns": {
                 "code": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": false
                 },
                 "discount_type": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": false,
                   "valueSet": {
                     "entityKind": "valueSet",
@@ -3180,7 +3180,7 @@
                 },
                 "discount_value": {
                   "codecId": "pg/numeric@1",
-                  "nativeType": "numeric",
+                  "dataType": "pg/numeric",
                   "nullable": false,
                   "typeParams": {
                     "precision": 10,
@@ -3189,16 +3189,16 @@
                 },
                 "id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "status": {
                   "codecId": "pg/text@1",
+                  "dataType": "pg/text",
                   "default": {
                     "kind": "literal",
                     "value": "DRAFT"
                   },
-                  "nativeType": "text",
                   "nullable": false,
                   "valueSet": {
                     "entityKind": "valueSet",
@@ -3209,26 +3209,26 @@
                 },
                 "usage_limit": {
                   "codecId": "pg/int4@1",
-                  "nativeType": "int4",
+                  "dataType": "pg/int4",
                   "nullable": true
                 },
                 "used_count": {
                   "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
                   "default": {
                     "kind": "literal",
                     "value": 0
                   },
-                  "nativeType": "int4",
                   "nullable": false
                 },
                 "valid_from": {
                   "codecId": "pg/timestamptz-date@1",
-                  "nativeType": "timestamptz",
+                  "dataType": "pg/timestamptz",
                   "nullable": false
                 },
                 "valid_to": {
                   "codecId": "pg/timestamptz-date@1",
-                  "nativeType": "timestamptz",
+                  "dataType": "pg/timestamptz",
                   "nullable": false
                 }
               },
@@ -3262,31 +3262,34 @@
               "columns": {
                 "created_at": {
                   "codecId": "pg/timestamptz-date@1",
+                  "dataType": "pg/timestamptz",
                   "default": {
                     "expression": "now()",
                     "kind": "function"
                   },
-                  "nativeType": "timestamptz",
                   "nullable": false
                 },
                 "hotel_id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "user_id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 }
               },
               "foreignKeys": [
                 {
+                  "index": {
+                    "name": "favorites_user_id_idx_6c952402"
+                  },
                   "onDelete": "cascade",
                   "source": {
                     "columns": [
@@ -3304,6 +3307,9 @@
                   }
                 },
                 {
+                  "index": {
+                    "name": "favorites_hotel_id_idx_3d513303"
+                  },
                   "onDelete": "cascade",
                   "source": {
                     "columns": [
@@ -3357,17 +3363,20 @@
               "columns": {
                 "amenity_id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "hotel_id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 }
               },
               "foreignKeys": [
                 {
+                  "index": {
+                    "name": "hotel_amenities_hotel_id_idx_3d513303"
+                  },
                   "onDelete": "cascade",
                   "source": {
                     "columns": [
@@ -3385,6 +3394,9 @@
                   }
                 },
                 {
+                  "index": {
+                    "name": "hotel_amenities_amenity_id_idx_dffbbf85"
+                  },
                   "onDelete": "cascade",
                   "source": {
                     "columns": [
@@ -3432,40 +3444,43 @@
               "columns": {
                 "hotel_id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "image_url": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": false
                 },
                 "is_primary": {
                   "codecId": "pg/bool@1",
+                  "dataType": "pg/bool",
                   "default": {
                     "kind": "literal",
                     "value": false
                   },
-                  "nativeType": "bool",
                   "nullable": false
                 },
                 "sort_order": {
                   "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
                   "default": {
                     "kind": "literal",
                     "value": 0
                   },
-                  "nativeType": "int4",
                   "nullable": false
                 }
               },
               "foreignKeys": [
                 {
+                  "index": {
+                    "name": "hotel_images_hotel_id_idx_3d513303"
+                  },
                   "onDelete": "cascade",
                   "source": {
                     "columns": [
@@ -3518,70 +3533,52 @@
                 }
               ],
               "columns": {
-                "check_in_time": {
-                  "codecId": "pg/text@1",
-                  "default": {
-                    "kind": "literal",
-                    "value": "14:00"
-                  },
-                  "nativeType": "text",
-                  "nullable": false
-                },
-                "check_out_time": {
-                  "codecId": "pg/text@1",
-                  "default": {
-                    "kind": "literal",
-                    "value": "11:00"
-                  },
-                  "nativeType": "text",
-                  "nullable": false
-                },
                 "created_at": {
                   "codecId": "pg/timestamptz-date@1",
+                  "dataType": "pg/timestamptz",
                   "default": {
                     "expression": "now()",
                     "kind": "function"
                   },
-                  "nativeType": "timestamptz",
                   "nullable": false
                 },
                 "description": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": true
                 },
                 "id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "name": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": false
                 },
                 "owner_id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "slug": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": false
                 },
                 "star_rating": {
                   "codecId": "pg/int4@1",
-                  "nativeType": "int4",
+                  "dataType": "pg/int4",
                   "nullable": true
                 },
                 "status": {
                   "codecId": "pg/text@1",
+                  "dataType": "pg/text",
                   "default": {
                     "kind": "literal",
                     "value": "DRAFT"
                   },
-                  "nativeType": "text",
                   "nullable": false,
                   "valueSet": {
                     "entityKind": "valueSet",
@@ -3592,12 +3589,15 @@
                 },
                 "updated_at": {
                   "codecId": "pg/timestamptz-date@1",
-                  "nativeType": "timestamptz",
+                  "dataType": "pg/timestamptz",
                   "nullable": false
                 }
               },
               "foreignKeys": [
                 {
+                  "index": {
+                    "name": "hotels_owner_id_idx_ade9f347"
+                  },
                   "source": {
                     "columns": [
                       "owner_id"
@@ -3656,36 +3656,36 @@
               "columns": {
                 "created_at": {
                   "codecId": "pg/timestamptz-date@1",
+                  "dataType": "pg/timestamptz",
                   "default": {
                     "expression": "now()",
                     "kind": "function"
                   },
-                  "nativeType": "timestamptz",
                   "nullable": false
                 },
                 "id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "message": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": false
                 },
                 "read_at": {
                   "codecId": "pg/timestamptz-date@1",
-                  "nativeType": "timestamptz",
+                  "dataType": "pg/timestamptz",
                   "nullable": true
                 },
                 "title": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": false
                 },
                 "type": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": false,
                   "valueSet": {
                     "entityKind": "valueSet",
@@ -3696,12 +3696,15 @@
                 },
                 "user_id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 }
               },
               "foreignKeys": [
                 {
+                  "index": {
+                    "name": "notifications_user_id_idx_6c952402"
+                  },
                   "onDelete": "cascade",
                   "source": {
                     "columns": [
@@ -3765,7 +3768,7 @@
               "columns": {
                 "amount": {
                   "codecId": "pg/numeric@1",
-                  "nativeType": "numeric",
+                  "dataType": "pg/numeric",
                   "nullable": false,
                   "typeParams": {
                     "precision": 10,
@@ -3774,54 +3777,54 @@
                 },
                 "booking_id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "created_at": {
                   "codecId": "pg/timestamptz-date@1",
+                  "dataType": "pg/timestamptz",
                   "default": {
                     "expression": "now()",
                     "kind": "function"
                   },
-                  "nativeType": "timestamptz",
                   "nullable": false
                 },
                 "currency": {
                   "codecId": "pg/text@1",
+                  "dataType": "pg/text",
                   "default": {
                     "kind": "literal",
                     "value": "INR"
                   },
-                  "nativeType": "text",
                   "nullable": false
                 },
                 "id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "order_id": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": false
                 },
                 "paid_at": {
                   "codecId": "pg/timestamptz-date@1",
-                  "nativeType": "timestamptz",
+                  "dataType": "pg/timestamptz",
                   "nullable": true
                 },
                 "provider": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": false
                 },
                 "status": {
                   "codecId": "pg/text@1",
+                  "dataType": "pg/text",
                   "default": {
                     "kind": "literal",
                     "value": "PENDING"
                   },
-                  "nativeType": "text",
                   "nullable": false,
                   "valueSet": {
                     "entityKind": "valueSet",
@@ -3832,22 +3835,25 @@
                 },
                 "transaction_id": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": true
                 },
                 "updated_at": {
                   "codecId": "pg/timestamptz-date@1",
-                  "nativeType": "timestamptz",
+                  "dataType": "pg/timestamptz",
                   "nullable": false
                 },
                 "user_id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 }
               },
               "foreignKeys": [
                 {
+                  "index": {
+                    "name": "payments_booking_id_idx_aeea169b"
+                  },
                   "source": {
                     "columns": [
                       "booking_id"
@@ -3864,6 +3870,9 @@
                   }
                 },
                 {
+                  "index": {
+                    "name": "payments_user_id_idx_6c952402"
+                  },
                   "source": {
                     "columns": [
                       "user_id"
@@ -3929,7 +3938,7 @@
               "columns": {
                 "amount": {
                   "codecId": "pg/numeric@1",
-                  "nativeType": "numeric",
+                  "dataType": "pg/numeric",
                   "nullable": false,
                   "typeParams": {
                     "precision": 10,
@@ -3938,50 +3947,53 @@
                 },
                 "created_at": {
                   "codecId": "pg/timestamptz-date@1",
+                  "dataType": "pg/timestamptz",
                   "default": {
                     "expression": "now()",
                     "kind": "function"
                   },
-                  "nativeType": "timestamptz",
                   "nullable": false
                 },
                 "id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "payment_id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "provider_id": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": true
                 },
                 "reason": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": true
                 },
                 "refunded_at": {
                   "codecId": "pg/timestamptz-date@1",
-                  "nativeType": "timestamptz",
+                  "dataType": "pg/timestamptz",
                   "nullable": true
                 },
                 "status": {
                   "codecId": "pg/text@1",
+                  "dataType": "pg/text",
                   "default": {
                     "kind": "literal",
                     "value": "PENDING"
                   },
-                  "nativeType": "text",
                   "nullable": false
                 }
               },
               "foreignKeys": [
                 {
+                  "index": {
+                    "name": "refunds_payment_id_idx_7931cf41"
+                  },
                   "source": {
                     "columns": [
                       "payment_id"
@@ -4032,45 +4044,45 @@
               "columns": {
                 "booking_id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "comment": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": true
                 },
                 "created_at": {
                   "codecId": "pg/timestamptz-date@1",
+                  "dataType": "pg/timestamptz",
                   "default": {
                     "expression": "now()",
                     "kind": "function"
                   },
-                  "nativeType": "timestamptz",
                   "nullable": false
                 },
                 "hotel_id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "rating": {
                   "codecId": "pg/int4@1",
-                  "nativeType": "int4",
+                  "dataType": "pg/int4",
                   "nullable": false
                 },
                 "status": {
                   "codecId": "pg/text@1",
+                  "dataType": "pg/text",
                   "default": {
                     "kind": "literal",
                     "value": "PENDING"
                   },
-                  "nativeType": "text",
                   "nullable": false,
                   "valueSet": {
                     "entityKind": "valueSet",
@@ -4081,12 +4093,15 @@
                 },
                 "user_id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 }
               },
               "foreignKeys": [
                 {
+                  "index": {
+                    "name": "reviews_user_id_idx_6c952402"
+                  },
                   "source": {
                     "columns": [
                       "user_id"
@@ -4103,6 +4118,9 @@
                   }
                 },
                 {
+                  "index": {
+                    "name": "reviews_hotel_id_idx_3d513303"
+                  },
                   "onDelete": "cascade",
                   "source": {
                     "columns": [
@@ -4120,6 +4138,11 @@
                   }
                 },
                 {
+                  "index": {
+                    "unique": [
+                      "booking_id"
+                    ]
+                  },
                   "source": {
                     "columns": [
                       "booking_id"
@@ -4180,31 +4203,31 @@
               "columns": {
                 "available_rooms": {
                   "codecId": "pg/int4@1",
-                  "nativeType": "int4",
+                  "dataType": "pg/int4",
                   "nullable": false
                 },
                 "date": {
                   "codecId": "pg/date-string@1",
-                  "nativeType": "date",
+                  "dataType": "pg/date",
                   "nullable": false
                 },
                 "id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "is_closed": {
                   "codecId": "pg/bool@1",
+                  "dataType": "pg/bool",
                   "default": {
                     "kind": "literal",
                     "value": false
                   },
-                  "nativeType": "bool",
                   "nullable": false
                 },
                 "price": {
                   "codecId": "pg/numeric@1",
-                  "nativeType": "numeric",
+                  "dataType": "pg/numeric",
                   "nullable": false,
                   "typeParams": {
                     "precision": 10,
@@ -4213,12 +4236,15 @@
                 },
                 "room_type_id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 }
               },
               "foreignKeys": [
                 {
+                  "index": {
+                    "name": "room_inventory_room_type_id_idx_3209d37a"
+                  },
                   "onDelete": "cascade",
                   "source": {
                     "columns": [
@@ -4279,7 +4305,7 @@
               "columns": {
                 "base_price": {
                   "codecId": "pg/numeric@1",
-                  "nativeType": "numeric",
+                  "dataType": "pg/numeric",
                   "nullable": false,
                   "typeParams": {
                     "precision": 10,
@@ -4288,7 +4314,7 @@
                 },
                 "bed_type": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": false,
                   "valueSet": {
                     "entityKind": "valueSet",
@@ -4299,50 +4325,53 @@
                 },
                 "description": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": true
                 },
                 "hotel_id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "max_adults": {
                   "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
                   "default": {
                     "kind": "literal",
                     "value": 2
                   },
-                  "nativeType": "int4",
                   "nullable": false
                 },
                 "max_children": {
                   "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
                   "default": {
                     "kind": "literal",
                     "value": 0
                   },
-                  "nativeType": "int4",
                   "nullable": false
                 },
                 "name": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": false
                 },
                 "total_rooms": {
                   "codecId": "pg/int4@1",
-                  "nativeType": "int4",
+                  "dataType": "pg/int4",
                   "nullable": false
                 }
               },
               "foreignKeys": [
                 {
+                  "index": {
+                    "name": "room_types_hotel_id_idx_3d513303"
+                  },
                   "onDelete": "cascade",
                   "source": {
                     "columns": [
@@ -4393,50 +4422,50 @@
               "columns": {
                 "clerk_id": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": true
                 },
                 "created_at": {
                   "codecId": "pg/timestamptz-date@1",
+                  "dataType": "pg/timestamptz",
                   "default": {
                     "expression": "now()",
                     "kind": "function"
                   },
-                  "nativeType": "timestamptz",
                   "nullable": false
                 },
                 "email": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": false
                 },
                 "id": {
                   "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
+                  "dataType": "pg/uuid",
                   "nullable": false
                 },
                 "name": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": false
                 },
                 "password_hash": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": true
                 },
                 "phone": {
                   "codecId": "pg/text@1",
-                  "nativeType": "text",
+                  "dataType": "pg/text",
                   "nullable": true
                 },
                 "role": {
                   "codecId": "pg/text@1",
+                  "dataType": "pg/text",
                   "default": {
                     "kind": "literal",
                     "value": "CUSTOMER"
                   },
-                  "nativeType": "text",
                   "nullable": false,
                   "valueSet": {
                     "entityKind": "valueSet",
@@ -4447,11 +4476,11 @@
                 },
                 "status": {
                   "codecId": "pg/text@1",
+                  "dataType": "pg/text",
                   "default": {
                     "kind": "literal",
                     "value": "ACTIVE"
                   },
-                  "nativeType": "text",
                   "nullable": false,
                   "valueSet": {
                     "entityKind": "valueSet",
@@ -4462,7 +4491,7 @@
                 },
                 "updated_at": {
                   "codecId": "pg/timestamptz-date@1",
-                  "nativeType": "timestamptz",
+                  "dataType": "pg/timestamptz",
                   "nullable": false
                 }
               },
@@ -4614,7 +4643,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "b48a0244aacc9fa64d8bdffc12c9e9497113a2217964c2da0785d5d452e13663"
+    "storageHash": "1c764eb87562ab10c459e9a05717127ddf81e36b34e29a7694c79d872ef72a39"
   },
   "execution": {
     "executionHash": "1b958e292e0912ebccb284f1679c97cf1172e1e4faf9b18d2ae3d27c7f18fb4b",
@@ -4851,6 +4880,8 @@
   "capabilities": {
     "postgres": {
       "distinctOn": true,
+      "forKeyShare": true,
+      "forNoKeyUpdate": true,
       "jsonAgg": true,
       "lateral": true,
       "limit": true,
@@ -4861,9 +4892,14 @@
       "checkConstraint": true,
       "defaultInInsert": true,
       "enums": true,
+      "forShare": true,
+      "forUpdate": true,
       "insertOnConflictSkip": true,
       "insertOnConflictWithoutTarget": true,
       "lateral": true,
+      "lockNowait": true,
+      "lockOf": true,
+      "lockSkipLocked": true,
       "returning": true,
       "scalarList": true
     }

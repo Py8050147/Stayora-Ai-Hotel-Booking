@@ -1,8 +1,6 @@
 #!/usr/bin/env -S node
-import type { Contract as End } from '../../snapshots/b48a0244aacc9fa64d8bdffc12c9e9497113a2217964c2da0785d5d452e13663/contract';
-import endContract from '../../snapshots/b48a0244aacc9fa64d8bdffc12c9e9497113a2217964c2da0785d5d452e13663/contract.json' with { type: 'json' };
-import type { Contract as Start } from '../../snapshots/bf807aa8e0fa8902a448567426c6651ab7a471b2af1aaf043d8830a33fa7f536/contract';
-import startContract from '../../snapshots/bf807aa8e0fa8902a448567426c6651ab7a471b2af1aaf043d8830a33fa7f536/contract.json' with { type: 'json' };
+import type { Contract as End } from '../../snapshots/1c764eb87562ab10c459e9a05717127ddf81e36b34e29a7694c79d872ef72a39/contract';
+import endContract from '../../snapshots/1c764eb87562ab10c459e9a05717127ddf81e36b34e29a7694c79d872ef72a39/contract.json' with { type: 'json' };
 import {
   Migration,
   MigrationCLI,
@@ -11,16 +9,15 @@ import {
   fn,
   lit,
   primaryKey,
+  sql,
 } from '@prisma/orm-postgres/migration';
 
-export default class M extends Migration<Start, End> {
-  override readonly startContractJson = startContract;
+export default class M extends Migration<never, End> {
   override readonly endContractJson = endContract;
 
   override get operations() {
     return [
-      this.dropTable({ schema: 'public', table: 'Post' }),
-      this.dropTable({ schema: 'public', table: 'User' }),
+      this.createSchema({ schema: 'public' }),
       this.createTable({
         schema: 'public',
         table: 'addresses',
@@ -93,7 +90,7 @@ export default class M extends Migration<Start, End> {
           col('coupon_id', 'uuid', { codecRef: { codecId: 'pg/uuid@1' } }),
           col('created_at', 'timestamptz', {
             notNull: true,
-            default: fn('now()'),
+            default: fn(sql`now()`),
             codecRef: { codecId: 'pg/timestamptz-date@1' },
           }),
           col('discount', 'numeric(10,2)', {
@@ -142,11 +139,11 @@ export default class M extends Migration<Start, End> {
           primaryKey(['id']),
           checkExpression(
             'bookings_payment_status_check_e36f7f9e',
-            "\"payment_status\" IN ('PENDING', 'AUTHORIZED', 'PAID', 'FAILED', 'REFUNDED', 'PARTIALLY_REFUNDED')",
+            sql`"payment_status" IN ('PENDING', 'AUTHORIZED', 'PAID', 'FAILED', 'REFUNDED', 'PARTIALLY_REFUNDED')`,
           ),
           checkExpression(
             'bookings_status_check_77e76a7c',
-            "\"status\" IN ('PENDING', 'PAYMENT_PENDING', 'CONFIRMED', 'CHECKED_IN', 'CHECKED_OUT', 'CANCELLED', 'REFUNDED', 'EXPIRED')",
+            sql`"status" IN ('PENDING', 'PAYMENT_PENDING', 'CONFIRMED', 'CHECKED_IN', 'CHECKED_OUT', 'CANCELLED', 'REFUNDED', 'EXPIRED')`,
           ),
         ],
       }),
@@ -185,11 +182,11 @@ export default class M extends Migration<Start, End> {
           primaryKey(['id']),
           checkExpression(
             'coupons_discount_type_check_8c8ea4be',
-            "\"discount_type\" IN ('PERCENTAGE', 'FIXED_AMOUNT')",
+            sql`"discount_type" IN ('PERCENTAGE', 'FIXED_AMOUNT')`,
           ),
           checkExpression(
             'coupons_status_check_eb55a64b',
-            "\"status\" IN ('DRAFT', 'ACTIVE', 'EXPIRED', 'DISABLED')",
+            sql`"status" IN ('DRAFT', 'ACTIVE', 'EXPIRED', 'DISABLED')`,
           ),
         ],
       }),
@@ -199,7 +196,7 @@ export default class M extends Migration<Start, End> {
         columns: [
           col('created_at', 'timestamptz', {
             notNull: true,
-            default: fn('now()'),
+            default: fn(sql`now()`),
             codecRef: { codecId: 'pg/timestamptz-date@1' },
           }),
           col('hotel_id', 'uuid', { notNull: true, codecRef: { codecId: 'pg/uuid@1' } }),
@@ -241,19 +238,9 @@ export default class M extends Migration<Start, End> {
         schema: 'public',
         table: 'hotels',
         columns: [
-          col('check_in_time', 'text', {
-            notNull: true,
-            default: lit('14:00'),
-            codecRef: { codecId: 'pg/text@1' },
-          }),
-          col('check_out_time', 'text', {
-            notNull: true,
-            default: lit('11:00'),
-            codecRef: { codecId: 'pg/text@1' },
-          }),
           col('created_at', 'timestamptz', {
             notNull: true,
-            default: fn('now()'),
+            default: fn(sql`now()`),
             codecRef: { codecId: 'pg/timestamptz-date@1' },
           }),
           col('description', 'text', { codecRef: { codecId: 'pg/text@1' } }),
@@ -276,7 +263,7 @@ export default class M extends Migration<Start, End> {
           primaryKey(['id']),
           checkExpression(
             'hotels_status_check_0c3a2ffa',
-            "\"status\" IN ('DRAFT', 'PENDING_APPROVAL', 'ACTIVE', 'REJECTED', 'SUSPENDED')",
+            sql`"status" IN ('DRAFT', 'PENDING_APPROVAL', 'ACTIVE', 'REJECTED', 'SUSPENDED')`,
           ),
         ],
       }),
@@ -286,7 +273,7 @@ export default class M extends Migration<Start, End> {
         columns: [
           col('created_at', 'timestamptz', {
             notNull: true,
-            default: fn('now()'),
+            default: fn(sql`now()`),
             codecRef: { codecId: 'pg/timestamptz-date@1' },
           }),
           col('id', 'uuid', { notNull: true, codecRef: { codecId: 'pg/uuid@1' } }),
@@ -300,7 +287,7 @@ export default class M extends Migration<Start, End> {
           primaryKey(['id']),
           checkExpression(
             'notifications_type_check_c77e24ed',
-            "\"type\" IN ('BOOKING', 'PAYMENT', 'CANCELLATION', 'REFUND', 'PROMOTION', 'SYSTEM')",
+            sql`"type" IN ('BOOKING', 'PAYMENT', 'CANCELLATION', 'REFUND', 'PROMOTION', 'SYSTEM')`,
           ),
         ],
       }),
@@ -315,7 +302,7 @@ export default class M extends Migration<Start, End> {
           col('booking_id', 'uuid', { notNull: true, codecRef: { codecId: 'pg/uuid@1' } }),
           col('created_at', 'timestamptz', {
             notNull: true,
-            default: fn('now()'),
+            default: fn(sql`now()`),
             codecRef: { codecId: 'pg/timestamptz-date@1' },
           }),
           col('currency', 'text', {
@@ -343,7 +330,7 @@ export default class M extends Migration<Start, End> {
           primaryKey(['id']),
           checkExpression(
             'payments_status_check_c6292004',
-            "\"status\" IN ('PENDING', 'AUTHORIZED', 'PAID', 'FAILED', 'REFUNDED', 'PARTIALLY_REFUNDED')",
+            sql`"status" IN ('PENDING', 'AUTHORIZED', 'PAID', 'FAILED', 'REFUNDED', 'PARTIALLY_REFUNDED')`,
           ),
         ],
       }),
@@ -357,7 +344,7 @@ export default class M extends Migration<Start, End> {
           }),
           col('created_at', 'timestamptz', {
             notNull: true,
-            default: fn('now()'),
+            default: fn(sql`now()`),
             codecRef: { codecId: 'pg/timestamptz-date@1' },
           }),
           col('id', 'uuid', { notNull: true, codecRef: { codecId: 'pg/uuid@1' } }),
@@ -381,7 +368,7 @@ export default class M extends Migration<Start, End> {
           col('comment', 'text', { codecRef: { codecId: 'pg/text@1' } }),
           col('created_at', 'timestamptz', {
             notNull: true,
-            default: fn('now()'),
+            default: fn(sql`now()`),
             codecRef: { codecId: 'pg/timestamptz-date@1' },
           }),
           col('hotel_id', 'uuid', { notNull: true, codecRef: { codecId: 'pg/uuid@1' } }),
@@ -398,7 +385,7 @@ export default class M extends Migration<Start, End> {
           primaryKey(['id']),
           checkExpression(
             'reviews_status_check_ba5fd2ab',
-            "\"status\" IN ('PENDING', 'PUBLISHED', 'HIDDEN', 'REJECTED')",
+            sql`"status" IN ('PENDING', 'PUBLISHED', 'HIDDEN', 'REJECTED')`,
           ),
         ],
       }),
@@ -451,7 +438,7 @@ export default class M extends Migration<Start, End> {
           primaryKey(['id']),
           checkExpression(
             'room_types_bed_type_check_e9ae1490',
-            "\"bed_type\" IN ('SINGLE', 'DOUBLE', 'QUEEN', 'KING', 'TWIN', 'BUNK')",
+            sql`"bed_type" IN ('SINGLE', 'DOUBLE', 'QUEEN', 'KING', 'TWIN', 'BUNK')`,
           ),
         ],
       }),
@@ -462,7 +449,7 @@ export default class M extends Migration<Start, End> {
           col('clerk_id', 'text', { codecRef: { codecId: 'pg/text@1' } }),
           col('created_at', 'timestamptz', {
             notNull: true,
-            default: fn('now()'),
+            default: fn(sql`now()`),
             codecRef: { codecId: 'pg/timestamptz-date@1' },
           }),
           col('email', 'text', { notNull: true, codecRef: { codecId: 'pg/text@1' } }),
@@ -489,11 +476,11 @@ export default class M extends Migration<Start, End> {
           primaryKey(['id']),
           checkExpression(
             'users_role_check_529998aa',
-            "\"role\" IN ('CUSTOMER', 'HOTEL_OWNER', 'HOTEL_MANAGER', 'ADMIN')",
+            sql`"role" IN ('CUSTOMER', 'HOTEL_OWNER', 'HOTEL_MANAGER', 'ADMIN')`,
           ),
           checkExpression(
             'users_status_check_3a7c0f48',
-            "\"status\" IN ('ACTIVE', 'SUSPENDED', 'DELETED')",
+            sql`"status" IN ('ACTIVE', 'SUSPENDED', 'DELETED')`,
           ),
         ],
       }),
