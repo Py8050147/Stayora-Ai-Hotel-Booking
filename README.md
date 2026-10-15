@@ -1,8 +1,16 @@
 # Stayora — AI Hotel Booking
 
+[![Live](https://img.shields.io/website?down_color=red&down_message=down&label=live&up_message=online&url=https%3A%2F%2Fstayora-ai-hotel-booking.vercel.app&style=flat-square)](https://stayora-ai-hotel-booking.vercel.app) [![GitHub stars](https://img.shields.io/github/stars/Py8050147/Stayora-Ai-Hotel-Booking?style=flat-square)](https://github.com/Py8050147/Stayora-Ai-Hotel-Booking/stargazers) [![Forks](https://img.shields.io/github/forks/Py8050147/Stayora-Ai-Hotel-Booking?style=flat-square)](https://github.com/Py8050147/Stayora-Ai-Hotel-Booking/network/members) [![Issues](https://img.shields.io/github/issues/Py8050147/Stayora-Ai-Hotel-Booking?style=flat-square)](https://github.com/Py8050147/Stayora-Ai-Hotel-Booking/issues) [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square)](https://www.typescriptlang.org/) [![Next.js](https://img.shields.io/badge/Next.js-16.3.8-black?style=flat-square)](https://nextjs.org/)
+
 Stayora is a modern hotel booking application built with Next.js, TypeScript, and Prisma. It offers a polished hotel discovery experience with search, filters, favorite listings, and an admin dashboard for managing hotel data.
 
 Live demo: https://stayora-ai-hotel-booking.vercel.app
+
+## Screenshot
+
+> Place a screenshot in `public/screenshot.png` (recommended: 1280×720). If you prefer a different file name or location, update the path below.
+
+![Stayora screenshot](/screenshot.png)
 
 ## Overview
 
