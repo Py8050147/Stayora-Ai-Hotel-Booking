@@ -1,4 +1,4 @@
-import { db } from "../../prisma/db";
+import { db } from "../prisma/db";
 import { currentUser } from "@clerk/nextjs/server";
 
 // Syncs the signed-in Clerk user into your own User table.
@@ -8,11 +8,12 @@ export async function checkUser() {
   if (!user) return null;
 
   try {
-    const existingUser = await db.orm.public.User.where({
+    // 1. Check if the user already exists by clerkId
+    const existingByClerkId = await db.orm.public.User.where({
       clerkId: user.id,
     }).first();
 
-    if (existingUser) return existingUser;
+    if (existingByClerkId) return existingByClerkId;
 
     const email =
       user.primaryEmailAddress?.emailAddress ??
@@ -23,18 +24,49 @@ export async function checkUser() {
       return null;
     }
 
+    const name = user.fullName ?? user.firstName ?? email.split("@")[0];
+    const phone = user.primaryPhoneNumber?.phoneNumber ?? null;
+
+    // 2. Check if a user with this email already exists (e.g. recreated in Clerk)
+    const existingByEmail = await db.orm.public.User.where({
+      email,
+    }).first();
+
+    if (existingByEmail) {
+      await db.orm.public.User.where({
+        id: existingByEmail.id,
+      }).update({
+        clerkId: user.id,
+        name,
+        phone,
+      });
+
+      return {
+        ...existingByEmail,
+        clerkId: user.id,
+        name,
+        phone,
+      };
+    }
+
+    // 3. Create the new user
     try {
       // role and status are omitted, so the DB defaults apply (CUSTOMER, ACTIVE)
       return await db.orm.public.User.create({
         clerkId: user.id,
-        name: user.fullName ?? user.firstName ?? email.split("@")[0],
+        name,
         email,
-        phone: user.primaryPhoneNumber?.phoneNumber ?? null,
+        phone,
       });
-    } catch (error) {
-      // Two requests can race to create the same user (23505 = unique violation).
-      // If that happens, the other request already created it, so fetch it.
-      throw error;
+    } catch (createError) {
+      // Two requests raced to create the same user (23505 = unique violation).
+      // Fetch the user that the winning request just created.
+      const racedUser =
+        (await db.orm.public.User.where({ clerkId: user.id }).first()) ??
+        (await db.orm.public.User.where({ email }).first());
+
+      if (racedUser) return racedUser;
+      throw createError;
     }
   } catch (error) {
     console.error("Error checking user:", error);

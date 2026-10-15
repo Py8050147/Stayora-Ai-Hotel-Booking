@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@clerk/nextjs";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardContent,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from "@/components/ui/card";
 import {
   Table,
@@ -15,7 +15,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
+  TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -40,53 +40,63 @@ import { Edit2, Trash2, RefreshCw, Loader2, Plus } from "lucide-react";
 import EditHotelForm from "@/components/hotels/EditHotelForm";
 import { toast } from "sonner";
 
+interface Hotel {
+  id: string;
+  name: string;
+  starRating?: number | null;
+  status: string;
+  [key: string]: unknown;
+}
+
 export default function DashboardPage() {
   const { isSignedIn, isLoaded } = useAuth();
   const router = useRouter();
 
-  useEffect(() => {
-    if (isLoaded && !isSignedIn) {
-      redirect("/sign-in");
-    }
-  }, [isLoaded, isSignedIn]);
-
-  const [hotels, setHotels] = useState<any[]>([]);
+  const [hotels, setHotels] = useState<Hotel[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [editingHotel, setEditingHotel] = useState<any>(null);
+  const [editingHotel, setEditingHotel] = useState<Hotel | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
-  async function fetchHotels() {
+  const fetchHotels = useCallback(async () => {
     setIsLoading(true);
     try {
       const response = await fetch("/api/hotel");
       if (response.status === 401) {
-        window.location.href = "/sign-in";
+        router.push("/auth/sign-in");
         return;
       }
       if (!response.ok) throw new Error("Failed to fetch hotels");
       const data = await response.json();
 
-      setHotels(Array.isArray(data) ? data : (data ? [data] : []));
-    } catch (e: any) {
+      setHotels(Array.isArray(data) ? data : data ? [data] : []);
+    } catch (e: unknown) {
       console.error(e);
       toast.error("Failed to load hotels");
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [router]);
 
   useEffect(() => {
+    if (!isLoaded) return;
+
+    if (!isSignedIn) {
+      router.replace("/auth/sign-in");
+      return;
+    }
+
     fetchHotels();
-  }, []);
+  }, [isLoaded, isSignedIn, router, fetchHotels]);
 
   async function handleDelete(id: string) {
     try {
       const response = await fetch(`/api/hotel/${id}`, { method: "DELETE" });
       if (!response.ok) throw new Error("Failed to delete hotel");
       toast.success("Hotel deleted successfully");
-      setHotels(hotels.filter(h => h.id !== id));
-    } catch (e: any) {
-      toast.error(e.message);
+      setHotels((prev) => prev.filter((h) => h.id !== id));
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Failed to delete hotel";
+      toast.error(message);
     }
   }
 
@@ -99,16 +109,17 @@ export default function DashboardPage() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => fetchHotels()}
+              onClick={fetchHotels}
               disabled={isLoading}
             >
-              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <RefreshCw className="h-4 w-4" />
+              )}
               <span className="ml-2">Refresh</span>
             </Button>
-            <Button
-              size="sm"
-              onClick={() => router.push("/hotels/create")}
-            >
+            <Button size="sm" onClick={() => router.push("/hotels/create")}>
               <Plus className="h-4 w-4" />
               <span className="ml-2">Add Hotel</span>
             </Button>
@@ -131,9 +142,15 @@ export default function DashboardPage() {
                 {hotels.map((hotel) => (
                   <TableRow key={hotel.id}>
                     <TableCell className="font-medium">{hotel.name}</TableCell>
-                    <TableCell>{hotel.starRating ? `${hotel.starRating}` : "N/A"}</TableCell>
                     <TableCell>
-                      <Badge variant={hotel.status === "ACTIVE" ? "default" : "secondary"}>
+                      {hotel.starRating ? `${hotel.starRating}` : "N/A"}
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={
+                          hotel.status === "ACTIVE" ? "default" : "secondary"
+                        }
+                      >
                         {hotel.status}
                       </Badge>
                     </TableCell>
@@ -151,15 +168,22 @@ export default function DashboardPage() {
                         </Button>
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
-                            <Button variant="ghost" size="icon" className="text-destructive hover:bg-destructive/10">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="text-destructive hover:bg-destructive/10"
+                            >
                               <Trash2 className="h-4 w-4" />
                             </Button>
                           </AlertDialogTrigger>
                           <AlertDialogContent>
                             <AlertDialogHeader>
-                              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                              <AlertDialogTitle>
+                                Are you absolutely sure?
+                              </AlertDialogTitle>
                               <AlertDialogDescription>
-                                This action cannot be undone. This hotel and all its data will be permanently deleted.
+                                This action cannot be undone. This hotel and all
+                                its data will be permanently deleted.
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
@@ -182,7 +206,7 @@ export default function DashboardPage() {
           ) : (
             <div className="text-center py-12">
               <p className="text-muted-foreground text-lg">
-                You haven't added any hotels yet.
+                You haven&apos;t added any hotels yet.
               </p>
               <Button
                 className="mt-4"

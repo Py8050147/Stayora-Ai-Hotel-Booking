@@ -126,7 +126,7 @@ model Hotel {
   updatedAt   temporal.updatedAtJsDate() @map("updated_at")
 
   owner       User                       @relation(fields: [ownerId], references: [id])
-  address     Address?
+  address     Address[]
   images      HotelImage[]
   amenities   HotelAmenity[]
   roomTypes   RoomType[]

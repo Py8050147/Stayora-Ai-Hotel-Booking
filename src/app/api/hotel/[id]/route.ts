@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth, currentUser } from "@clerk/nextjs/server";
-import { db } from "../../../../../prisma/db";
+import { db } from "../../../../prisma/db";
 import { checkUser } from "@/lib/checkUser";
 import { ZodError } from "zod";
 import { createSchema } from "@/lib/schema/hotelSchema";

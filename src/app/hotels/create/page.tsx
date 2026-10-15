@@ -4,9 +4,10 @@ import CreateHotelForm from "@/components/hotels/CreateHotelForm";
 
 export default async function CreateHotelPage() {
   const user = await checkUser();
+  console.log("CreateHotelPage user:", user);
 
   if (!user) {
-    redirect("/sign-in");
+    throw new Error("User not found");
   }
 
   return (
