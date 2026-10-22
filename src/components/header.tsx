@@ -17,11 +17,11 @@ export default function Header() {
                     className="flex items-center gap-2 rounded-md transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
                     <Image
-                        src="/logo.png"
+                        src="/FullLogo_Transparent_NoBuffer.png"
                         alt="Stayora logo"
-                        width={32}
-                        height={32}
-                        className="h-8 w-8 object-contain"
+                        width={36}
+                        height={36}
+                        className="h-10 w-10 object-contain"
                         priority
                     />
                     <span className="text-xl font-bold tracking-tight">

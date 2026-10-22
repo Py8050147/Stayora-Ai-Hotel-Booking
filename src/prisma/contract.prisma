@@ -402,3 +402,21 @@ model Notification {
   @@index([userId, createdAt])
   @@map("notifications")
 }
+
+// ============================================================
+// CONTACT
+// ============================================================
+model Contact {
+  id        Uuid              @id @default(uuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String
+  message   String
+  status    String            @default("NEW") // NEW, IN_PROGRESS, RESOLVED, SPAM
+  createdAt TimestamptzJsDate @default(now()) @map("created_at")
+  updatedAt TimestamptzJsDate @map("updated_at")
+
+  @@index([status])
+  @@map("contacts")
+}

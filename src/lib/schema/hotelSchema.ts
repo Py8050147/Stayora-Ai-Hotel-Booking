@@ -33,7 +33,7 @@ export const createSchema = z.object({
   amenityIds: z.array(z.string().uuid()).default([]),
 });
 
-const searchSchema = z
+export const searchSchema = z
   .object({
     city: z.string().trim().min(1).optional(),
     checkIn: dateStr.optional(),

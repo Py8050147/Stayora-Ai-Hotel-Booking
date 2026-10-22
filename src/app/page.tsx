@@ -412,17 +412,15 @@ export default function HomePage() {
           <div className="mt-8 flex items-center gap-6 border-b border-gray-200 pb-2">
             <button
               onClick={() => setActiveTab('all')}
-              className={`pb-3 text-sm font-semibold transition-colors ${
-                activeTab === 'all' ? 'border-b-2 border-[#0f766e] text-[#0f766e]' : 'text-gray-500 hover:text-gray-700'
-              }`}
+              className={`pb-3 text-sm font-semibold transition-colors ${activeTab === 'all' ? 'border-b-2 border-[#0f766e] text-[#0f766e]' : 'text-gray-500 hover:text-gray-700'
+                }`}
             >
               All Stays ({hotels.length})
             </button>
             <button
               onClick={() => setActiveTab('saved')}
-              className={`pb-3 text-sm font-semibold transition-colors ${
-                activeTab === 'saved' ? 'border-b-2 border-[#0f766e] text-[#0f766e]' : 'text-gray-500 hover:text-gray-700'
-              }`}
+              className={`pb-3 text-sm font-semibold transition-colors ${activeTab === 'saved' ? 'border-b-2 border-[#0f766e] text-[#0f766e]' : 'text-gray-500 hover:text-gray-700'
+                }`}
             >
               Saved for Later ({favorites.length})
             </button>

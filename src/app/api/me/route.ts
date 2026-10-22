@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { currentUser } from "@clerk/nextjs/server";
-import { db } from "../../../../prisma/db";
+import { db } from "../../../prisma/db";
 
 export async function GET() {
   try {

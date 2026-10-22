@@ -20,6 +20,10 @@
       "model": "Booking",
       "namespace": "public"
     },
+    "contacts": {
+      "model": "Contact",
+      "namespace": "public"
+    },
     "coupons": {
       "model": "Coupon",
       "namespace": "public"
@@ -966,6 +970,107 @@
               "table": "booking_rooms"
             }
           },
+          "Contact": {
+            "fields": {
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-date@1",
+                  "kind": "scalar"
+                }
+              },
+              "email": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "message": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "name": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "phone": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "status": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "subject": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-date@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {},
+            "storage": {
+              "fields": {
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "email": {
+                  "column": "email"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "message": {
+                  "column": "message"
+                },
+                "name": {
+                  "column": "name"
+                },
+                "phone": {
+                  "column": "phone"
+                },
+                "status": {
+                  "column": "status"
+                },
+                "subject": {
+                  "column": "subject"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "contacts"
+            }
+          },
           "Coupon": {
             "fields": {
               "code": {
@@ -1257,8 +1362,7 @@
             },
             "relations": {
               "address": {
-                "cardinality": "1:1",
-                "nullable": true,
+                "cardinality": "1:N",
                 "on": {
                   "localFields": [
                     "id"
@@ -3148,6 +3252,80 @@
                 }
               ]
             },
+            "contacts": {
+              "columns": {
+                "created_at": {
+                  "codecId": "pg/timestamptz-date@1",
+                  "dataType": "pg/timestamptz",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false
+                },
+                "email": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "dataType": "pg/uuid",
+                  "nullable": false
+                },
+                "message": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "name": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "phone": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
+                "status": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "default": {
+                    "kind": "literal",
+                    "value": "NEW"
+                  },
+                  "nullable": false
+                },
+                "subject": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-date@1",
+                  "dataType": "pg/timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [
+                {
+                  "columns": [
+                    "status"
+                  ],
+                  "name": "contacts_status_idx_e98638ab",
+                  "prefix": "contacts_status_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
+            },
             "coupons": {
               "checks": [
                 {
@@ -4643,10 +4821,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "1c764eb87562ab10c459e9a05717127ddf81e36b34e29a7694c79d872ef72a39"
+    "storageHash": "cd99ba891a4591c5bf0b381c0e243fc2d70e7832051ce61ee9138b97f47b44f6"
   },
   "execution": {
-    "executionHash": "1b958e292e0912ebccb284f1679c97cf1172e1e4faf9b18d2ae3d27c7f18fb4b",
+    "executionHash": "dc3a020d0c1bb4c32eb463a585d94fd7a9b9b0d9ea41073aa100c836c975fff7",
     "mutations": {
       "defaults": [
         {
@@ -4705,6 +4883,17 @@
           "ref": {
             "entry": "bookings",
             "field": "updated_at",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "contacts",
+            "field": "id",
             "namespace": "public"
           }
         },
